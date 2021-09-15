@@ -21,13 +21,16 @@ def walk_through_repo(path):
                    manifest_hash = f.readline().split(":")[1]
 
                 manifest_json_path = path + "/blobs/sha256/" + manifest_hash[0:2] + "/" + manifest_hash + "/data"
-                with open(manifest_json_path,"r") as f:
-                    manifest_json = json.load(f)
                 
                 image_size_byte = 0
                 try:
-                    for layer in manifest_json['layers']:
-                        image_size_byte += int(layer['size']) 
+                    with open(manifest_json_path,"r") as f:
+                        manifest_json = json.load(f)
+                    try:
+                        for layer in manifest_json['layers']:
+                            image_size_byte += int(layer['size']) 
+                    except:
+                        pass
                 except:
                     pass
 
